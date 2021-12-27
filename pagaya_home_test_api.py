@@ -1,14 +1,12 @@
 import pandas as pd
 import requests
 
-'''
-Please write an API call into ‘wayback machine’ which returns:
-1) How many data points we have for the URL.
-please store the results in a table which has: Data point Date , URL for the data point.
-'''
-
 
 def get_api_call():
+    """
+       get_api_call gets the GET response from the web archives server using CDX API
+       :return: CDX API output in json format.
+    """
     craig_list = 'https://chicago.craigslist.org/d/musical-instruments/search/msa'
     url = 'https://web.archive.org/cdx/search/cdx?url=' + craig_list + '&fl=timestamp,original&output=json'
     api_request = requests.get(url)
@@ -16,12 +14,20 @@ def get_api_call():
     return api_output
 
 
-def create_table():
+def create_table(data):
+    """
+        create_table takes the json output from te get_api_function and returns Pandas Dataframe.
+        :param data: the json file from get_api_call function.
+        :return: proper Pandas dataframe which contains:
+         1) Data Date Point
+         2) URL
+    """
     columns = ['Data_Date_Point', 'URL']
-    df = pd.DataFrame(api_output, columns=columns)
+    df = pd.DataFrame(data, columns=columns)
     df.drop(index=df.index[0], axis=0, inplace=True)
     print(df)
 
 
 if __name__ == '__main__':
-    get_api_call()
+    api_data = get_api_call()
+    create_table(api_data)
