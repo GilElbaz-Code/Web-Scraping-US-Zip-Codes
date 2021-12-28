@@ -16,7 +16,7 @@ def get_api_call():
 
 def create_table(data):
     """
-        create_table takes the json output from the get_api_call.
+        create_table takes the json output from the get_api_call and creates a table with data point date and URL.
         :param data: the json file from get_api_call function.
         :return: proper Pandas dataframe which contains:
          1) Data Date Point
