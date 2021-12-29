@@ -1,11 +1,11 @@
 import requests
 import pandas as pd
 import concurrent.futures
-import numpy as np
 import zc_list
 
 MAX_THREADS = 100
 headers = {'User-Agent': 'Chrome/50.0.2661.102'}
+rows_dict = {}
 
 
 def set_first_row_as_header(df):
