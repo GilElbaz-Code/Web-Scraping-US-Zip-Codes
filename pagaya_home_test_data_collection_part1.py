@@ -29,7 +29,7 @@ def request_zipcode(code):
                 if values:
                     columns.extend([i['x'] for i in data])
                 zip_to_coords[code] = (columns, *results)
-                # print(f"{code}={zip_to_coords[code]}")
+                print(f"{code}={zip_to_coords[code]}")
             except:
                 pass
         else:
@@ -45,5 +45,4 @@ def get_zipcode_data(zipcodes):
 
 if __name__ == '__main__':
     all_zip_codes = zc_list.get_zipcode_list()
-    df = pd.DataFrame(get_zipcode_data(all_zip_codes))
-    print(df)
+    print(all_zip_codes)

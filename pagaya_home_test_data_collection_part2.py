@@ -7,7 +7,7 @@ MAX_THREADS = 50
 headers = {'User-Agent': 'Chrome/50.0.2661.102'}
 
 
-def set_as_header(df):
+def set_first_row_as_header(df):
     new_header = df.iloc[0]  # grab the first row for the header
     df = df[1:]  # take the data less the header row
     df.columns = new_header  # set the header row as the df header
@@ -24,22 +24,20 @@ def get_population_gender_percent(zipcode):
     gender_percent = df_list[6]
     gender_percent.drop(gender_percent.columns[1], axis=1, inplace=True)
     gender_percent = gender_percent.transpose().reset_index(drop=True)
-    gender_percent = set_as_header(gender_percent)
+    gender_percent = set_first_row_as_header(gender_percent)
 
     # Handling population value
     population = population_df.iloc[:1]
     population = population.dropna(axis=1).transpose()
-    population = set_as_header(population)
-
-
+    population = set_first_row_as_header(population)
 
     frames = [population, gender_percent]
     combined = pd.concat(frames, axis=1, join='inner')
-
+    combined.insert(0, 'ZIP Code', zipcode)
     return combined
 
 
-def get_zipcode_data(zipcodes):
+def get_stats(zipcodes):
     threads = min(MAX_THREADS, len(zipcodes))
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
@@ -47,6 +45,6 @@ def get_zipcode_data(zipcodes):
 
 
 if __name__ == '__main__':
-    # all_zip_codes = zc_list.get_zipcode_list()
-    df_combined = get_population_gender_percent(23022)
+    all_zip_codes = zc_list.get_zipcode_list()
+    df_combined = get_stats(all_zip_codes)
     print(df_combined)
