@@ -5,6 +5,8 @@ import re, json
 import threading
 import concurrent.futures
 import time
+import uszipcode
+import urllib
 
 FIRST_ZIP_CODE = 601
 LAST_ZIP_CODE = 99950
@@ -43,13 +45,15 @@ def request_zipcode(code):
             zip_to_coords[code] = None
 
 
-def get_zipcode_data(zipcode_urls):
-    threads = min(MAX_THREADS, len(zipcode_urls))
+def get_zipcode_data(zipcodes):
+    threads = min(MAX_THREADS, len(zipcodes))
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
-        executor.map(request_zipcode, zipcode_urls)
+        executor.map(request_zipcode, zipcodes)
 
 
+if __name__ == '__main__':
+    pass
 '''
 "Normal Python threading"
 for i in range(23022, 23100):
