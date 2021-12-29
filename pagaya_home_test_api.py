@@ -25,6 +25,7 @@ def create_table(data):
     columns = ['Data_Date_Point', 'URL']
     df = pd.DataFrame(data, columns=columns)
     df.drop(index=df.index[0], axis=0, inplace=True)
+    df = df.reset_index(drop=True)
     print(df)
 
 

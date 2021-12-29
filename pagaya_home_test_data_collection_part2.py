@@ -1,6 +1,7 @@
 import requests
 import pandas as pd
 import concurrent.futures
+import numpy as np
 import zc_list
 
 MAX_THREADS = 100
@@ -25,6 +26,8 @@ def get_population_gender_percent(zipcode):
     gender_percent.drop(gender_percent.columns[1], axis=1, inplace=True)
     gender_percent = gender_percent.transpose().reset_index(drop=True)
     gender_percent = set_first_row_as_header(gender_percent)
+    gender_percent.replace('&percnt','%',regex=True, inplace=True)
+
 
     # Handling population value
     population = population_df.iloc[:1]
@@ -45,6 +48,6 @@ def get_stats(zipcodes):
 
 
 if __name__ == '__main__':
-    all_zip_codes = zc_list.get_zipcode_list()
-    df_combined = get_stats(all_zip_codes)
+    # all_zip_codes = zc_list.get_zipcode_list()
+    df_combined = get_population_gender_percent(23022)
     print(df_combined)
