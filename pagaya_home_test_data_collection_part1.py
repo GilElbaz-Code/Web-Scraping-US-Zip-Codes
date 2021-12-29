@@ -1,20 +1,21 @@
 import requests
-import pandas as pd
 import re, json
+import pandas as pd
 import concurrent.futures
 import zc_list
 
-MAX_THREADS = 50
+MAX_THREADS = 100
+headers = {'User-Agent': 'Chrome/50.0.2661.102'}
 
 zip_to_coords = {}
 
 
-def request_zipcode(code):
+def get_stats_from_graph(code):
     global zip_to_coords
     results = []
     columns = ["ZIP Code"]
     with requests.Session() as s:
-        s.headers = {'User-Agent': 'Mozilla/5.0'}
+        s.headers = headers
         url = f'https://www.unitedstateszipcodes.org/{str(code).zfill(5)}/#stats'
         r = s.get(url)
         res = re.findall(r'var data = (\[.*\])', r.text)
@@ -40,9 +41,10 @@ def get_zipcode_data(zipcodes):
     threads = min(MAX_THREADS, len(zipcodes))
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
-        executor.map(request_zipcode, zipcodes)
+        executor.map(get_stats_from_graph, zipcodes)
 
 
 if __name__ == '__main__':
     all_zip_codes = zc_list.get_zipcode_list()
-    print(all_zip_codes)
+    df = pd.DataFrame(get_zipcode_data(all_zip_codes))
+    print(df)

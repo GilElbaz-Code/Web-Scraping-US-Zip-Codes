@@ -27,6 +27,5 @@ def get_zipcode_list():
                 all_zipcodes.append(a.string)
     return all_zipcodes
 
-print(get_zipcode_list())
 
 
