@@ -3,17 +3,12 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import re, json
 import threading
-import concurrent.futures
-import time
 
 FIRST_ZIP_CODE = 601
 LAST_ZIP_CODE = 99950
-MAX_THREADS = 50
 
 zip_to_coords = {}
-
-
-# threads = []
+threads = []
 
 
 def request_zipcode(code):
@@ -43,15 +38,6 @@ def request_zipcode(code):
             zip_to_coords[code] = None
 
 
-def get_zipcode_data(zipcode_urls):
-    threads = min(MAX_THREADS, len(zipcode_urls))
-
-    with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
-        executor.map(request_zipcode, zipcode_urls)
-
-
-'''
-"Normal Python threading"
 for i in range(23022, 23100):
     t = threading.Thread(target=request_zipcode, args=(i,), daemon=True)
     threads.append(t)
@@ -59,7 +45,6 @@ for i in range(23022, 23100):
 
 for t in threads:
     t.join()
-'''
 
 # pd.options.display.max_columns = None
 # pd.options.display.max_rows = None
