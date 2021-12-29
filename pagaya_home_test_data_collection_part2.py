@@ -7,16 +7,34 @@ MAX_THREADS = 50
 headers = {'User-Agent': 'Chrome/50.0.2661.102'}
 
 
-def get_population_gender_percent(zipcodes):
-    global combined
-    for zipcode in zipcodes:
-        url = f'https://www.unitedstateszipcodes.org/{zipcode}'
-        page = requests.get(url, headers=headers)
-        df_list = pd.read_html(page.text)  # this parses all the tables in webpages to a list
-        population_df = df_list[1]
-        gender_percent_df = df_list[6]
-        population = population_df.iloc[:1].squeeze(axis=1)
-        combined = pd.concat(gender_percent_df, population)
+def set_as_header(df):
+    new_header = df.iloc[0]  # grab the first row for the header
+    df = df[1:]  # take the data less the header row
+    df.columns = new_header  # set the header row as the df header
+    return df
+
+
+def get_population_gender_percent(zipcode):
+    url = f'https://www.unitedstateszipcodes.org/{zipcode}'
+    page = requests.get(url, headers=headers)
+    df_list = pd.read_html(page.text)  # this parses all the tables in webpages to a list
+    population_df = df_list[1]
+
+    # Handling gender and percent
+    gender_percent = df_list[6]
+    gender_percent.drop(gender_percent.columns[1], axis=1, inplace=True)
+    gender_percent = gender_percent.transpose().reset_index(drop=True)
+    gender_percent = set_as_header(gender_percent)
+
+    # Handling population value
+    population = population_df.iloc[:1]
+    population = population.dropna(axis=1).transpose()
+    population = set_as_header(population)
+
+
+
+    frames = [population, gender_percent]
+    combined = pd.concat(frames, axis=1, join='inner')
 
     return combined
 
@@ -29,5 +47,6 @@ def get_zipcode_data(zipcodes):
 
 
 if __name__ == '__main__':
-    all_zip_codes = zc_list.get_zipcode_list()
-    df_combined = get_population_gender_percent(all_zip_codes)
+    # all_zip_codes = zc_list.get_zipcode_list()
+    df_combined = get_population_gender_percent(23022)
+    print(df_combined)
