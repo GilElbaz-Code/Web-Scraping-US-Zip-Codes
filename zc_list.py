@@ -9,7 +9,7 @@ soup = BeautifulSoup(page.text, 'html.parser')
 hrefs = []
 all_zipcodes = []
 
-# Extract all
+# Extract all href of each state in the US
 for data in soup.find_all('div', class_='state-list'):
     for a in data.find_all('a'):
         if a is not None:
@@ -17,12 +17,11 @@ for data in soup.find_all('div', class_='state-list'):
 hrefs.remove(None)
 
 
-
 def get_zipcode_list():
     """
-           get_zipcode_list gets the GET response from the web archives server using CDX API
-           :return: CDX API output in json format.
-        """
+        get_zipcode_list gets the GET response from the web archives server using CDX API
+        :return: return a list of all US Zipcodes
+    """
     for state in hrefs:
         state_url = url + state
         state_page = requests.get(state_url, headers=headers)
@@ -32,6 +31,3 @@ def get_zipcode_list():
             if str(a.string).isdigit():
                 all_zipcodes.append(a.string)
     return all_zipcodes
-
-
-

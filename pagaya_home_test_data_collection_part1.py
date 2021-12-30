@@ -39,6 +39,12 @@ def get_stats_from_graph(code):
 
 
 def get_zipcode_data(zipcodes):
+    """
+        get_stats uses concurrent.futuresmodule provides a high-level interface for
+        asynchronously executing callables.
+        The asynchronous execution is performed with threads to allow scalability and speed
+        :param zipcodes: an iterable (list) of all the zipcodes to be performed by get_population_gender_percent.
+    """
     threads = min(MAX_THREADS, len(zipcodes))
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
@@ -53,3 +59,4 @@ if __name__ == '__main__':
     result_df = pd.DataFrame(df_values)
     result_df.columns = columns
     print(result_df)
+

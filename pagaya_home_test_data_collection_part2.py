@@ -55,7 +55,7 @@ def get_stats(zipcodes):
         asynchronously executing callables.
         The asynchronous execution is performed with threads to allow scalability and speed
         :param zipcodes: an iterable (list) of all the zipcodes to be performed by get_population_gender_percent.
-        """
+    """
     threads = min(MAX_THREADS, len(zipcodes))
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
