@@ -11,9 +11,13 @@ zip_to_coords = {}
 
 
 def get_stats_from_graph(code):
+    """
+        get_stats_from_graph gets all the relevant data as required from the page and creates dictionary
+        of zip code and value for each year.
+        :param code: the zipcode
+    """
     global zip_to_coords
-    results = []
-    columns = ["ZIP Code"]
+    clmns = []
     with requests.Session() as s:
         s.headers = headers
         url = f'https://www.unitedstateszipcodes.org/{str(code).zfill(5)}/#stats'
@@ -25,12 +29,9 @@ def get_stats_from_graph(code):
             try:
                 data = relevant
                 values = [i['y'] for i in data]
-                values.insert(0, code)
-                results.append(values)
                 if values:
-                    columns.extend([i['x'] for i in data])
-                zip_to_coords[code] = (columns, *results)
-                print(f"{code}={zip_to_coords[code]}")
+                    clmns.extend([i['x'] for i in data])
+                zip_to_coords[code] = values
             except:
                 pass
         else:
@@ -45,6 +46,11 @@ def get_zipcode_data(zipcodes):
 
 
 if __name__ == '__main__':
-    all_zip_codes = zc_list.get_zipcode_list()
-    df = pd.DataFrame(get_zipcode_data(all_zip_codes))
-    print(df)
+    # all_zip_codes = zc_list.get_zipcode_list()
+    get_zipcode_data([30350, 84660])
+    df_values = list(map(list, zip_to_coords.items()))
+    columns = ["ZIP Codes",(*["Historical " + str(year) for year in range(2005, 2019)])]
+    result_df = pd.DataFrame(*df_values)
+    result_df.columns = columns
+    pd.options.display.max_rows = 999
+    print(result_df)

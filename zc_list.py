@@ -16,7 +16,12 @@ for data in soup.find_all('div', class_='state-list'):
 hrefs.remove(None)
 
 
+
 def get_zipcode_list():
+    """
+           get_zipcode_list gets the GET response from the web archives server using CDX API
+           :return: CDX API output in json format.
+        """
     for state in hrefs:
         state_url = url + state
         state_page = requests.get(state_url, headers=headers)

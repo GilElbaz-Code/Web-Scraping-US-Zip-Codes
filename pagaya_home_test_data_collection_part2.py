@@ -36,7 +36,7 @@ def get_population_gender_percent(zipcode):
     gender_percent.drop(gender_percent.columns[1], axis=1, inplace=True)
     gender_percent = gender_percent.transpose().reset_index(drop=True)
     gender_percent = set_first_row_as_header(gender_percent)
-    gender_percent.replace('&percnt', '%', regex=True, inplace=True)
+    gender_percent.replace('&percnt;', '%', regex=True, inplace=True)
 
     # Handling population value
     population = population_df.iloc[:1]
@@ -64,9 +64,9 @@ def get_stats(zipcodes):
 
 if __name__ == '__main__':
     # Get all the zip code in a list
-    all_zip_codes = zc_list.get_zipcode_list()
+    #all_zip_codes = zc_list.get_zipcode_list()
     # Scrap all the required data
-    get_stats(all_zip_codes)
+    get_stats([30350, 84660])
     # Combined all Pandas dataframe into one table.
     result_df = pd.concat(DATAFRAME_LIST, axis=0, join='inner').reset_index(drop=True)
-    # print(result_df)
+    print(result_df)
