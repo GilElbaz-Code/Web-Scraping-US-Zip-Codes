@@ -64,9 +64,9 @@ def get_stats(zipcodes):
 
 if __name__ == '__main__':
     # Get all the zip code in a list
-    # all_zip_codes = zc_list.get_zipcode_list()
+    all_zip_codes = zc_list.get_zipcode_list()
     # Scrap all the required data
-    get_stats([30350, 84660])
+    get_stats(all_zip_codes)
     # Combined all Pandas dataframe into one table.
     result_df = pd.concat(DATAFRAME_LIST, axis=0, join='inner').reset_index(drop=True)
     print(result_df)
