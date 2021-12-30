@@ -46,11 +46,10 @@ def get_zipcode_data(zipcodes):
 
 
 if __name__ == '__main__':
-    # all_zip_codes = zc_list.get_zipcode_list()
-    get_zipcode_data([30350, 84660])
-    df_values = list(map(list, zip_to_coords.items()))
-    columns = ["ZIP Codes",(*["Historical " + str(year) for year in range(2005, 2019)])]
-    result_df = pd.DataFrame(*df_values)
+    all_zip_codes = zc_list.get_zipcode_list()
+    get_zipcode_data(all_zip_codes)
+    df_values = [[key] + val for key, val in zip_to_coords.items()]
+    columns = ["ZIP Codes", (*["Historical " + str(year) for year in range(2005, 2019)])]
+    result_df = pd.DataFrame(df_values)
     result_df.columns = columns
-    pd.options.display.max_rows = 999
     print(result_df)

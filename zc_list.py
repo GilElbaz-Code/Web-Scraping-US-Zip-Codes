@@ -9,6 +9,7 @@ soup = BeautifulSoup(page.text, 'html.parser')
 hrefs = []
 all_zipcodes = []
 
+# Extract all
 for data in soup.find_all('div', class_='state-list'):
     for a in data.find_all('a'):
         if a is not None:

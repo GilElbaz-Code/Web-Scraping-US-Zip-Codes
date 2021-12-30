@@ -31,4 +31,5 @@ def create_table(data):
 
 if __name__ == '__main__':
     api_data = get_api_call()
-    create_table(api_data)
+    print(api_data)
+    #create_table(api_data)
